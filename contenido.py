@@ -8,6 +8,7 @@ import sys
 
 
 ## ====VARIABLES====
+Current_Name = os.path.basename(sys.executable)
 Operative_System = None
 App_Name = "NeuroTracker"
 App_Version = 0.9
@@ -71,7 +72,7 @@ def Clear():
 
 def UpdateApp():
     ## UPDATE LINK
-    update_link = "https://raw.githubusercontent.com/rubbennn/NeuroTracker/refs/heads/main/NeuroTracker"
+    update_link = "https://raw.githubusercontent.com/rubbennn/NeuroTracker/refs/heads/main/NeuroTracker.exe"
 
     ## .EXE
     exe = requests.get(update_link)
@@ -79,6 +80,11 @@ def UpdateApp():
     ## Save File
     with open("NeuroTracker_New.exe", "wb") as f:
         f.write(exe.content)
+        print(exe.status_code)
+        print(exe.url)
+        print(len(exe.content))
+
+        time.sleep(2)
 
     ## Create Bat
     with open("update.bat", "w") as f:
@@ -87,8 +93,9 @@ def UpdateApp():
 @echo off
 timeout /t 2 /nobreak > nul
 del "{sys.executable}"
-ren "NeuroTracker_New.exe" "NeuroTracker.exe"
-start "" "NeuroTracker.exe"
+ren "NeuroTracker_New.exe" "{Current_Name}"
+timeout /t 2 /nobreak > nul
+start {Current_Name}
 del update.bat
 """
         )
